@@ -1,0 +1,27 @@
+{% extends 'pets/base.html' %}
+
+{% block content %}
+<h1 class="mb-4">My Pets</h1>
+
+<div class="grid">
+    {% for pet in object_list %}
+    <div class="card">
+        {% if pet.photos.first %}
+        <img src="{{ pet.photos.first.image.url }}" class="card-img-top" alt="{{ pet.name }}">
+        {% else %}
+        <div class="card-img-top" style="background: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+            📷
+        </div>
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ pet.name }}</h5>
+            <p class="card-text">{{ pet.get_pet_type_display }}{% if pet.breed %} · {{ pet.breed }}{% endif %}</p>
+            <a href="{% url 'pet-detail' pet.pk %}" class="btn btn-primary">View Diary</a>
+            <a href="{% url 'pet-update' pet.pk %}" class="btn btn-secondary">Edit</a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info">No pets yet. Add your first pet!</div>
+    {% endfor %}
+</div>
+{% endblock %}

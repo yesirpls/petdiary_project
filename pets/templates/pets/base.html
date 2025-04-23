@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Pet Photo Diary</title>
+    <link rel="stylesheet" href="{% static 'pets/css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="sidebar">
+                <div class="logo-container">
+                    <img src="{% static 'pets/images/logo.png' %}" alt="Pet Diary Logo">
+                    <a class="navbar-brand home" href="{% url 'home' %}">Pet Diary</a>
+                </div>
+                <div class="nav">
+                    <a class="nav-link{% if request.path == '/' %} active{% endif %}" href="{% url 'home' %}">
+                        ⌂ Home
+                    </a>
+                    <a class="nav-link{% if request.path == '/pets/' %} active{% endif %}" href="{% url 'pet-list' %}">
+                        📝 My Pets
+                    </a>
+                    <a class="nav-link" href="{% url 'pet-create' %}">
+                        + Add Pet
+                    </a>
+                </div>
+            </div>
+            <div class="main-content">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    <script>
+        // Navigation link animations
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('mouseenter', (e) => {
+                e.target.style.transform = 'scale(1.05)';
+                let icon = e.target.querySelector('i');
+                if (icon) icon.classList.add('fa-bounce');
+            });
+            
+            link.addEventListener('mouseleave', (e) => {
+                e.target.style.transform = 'scale(1)';
+                let icon = e.target.querySelector('i');
+                if (icon) icon.classList.remove('fa-bounce');
+            });
+        });
+
+        // Enhanced floating logo animation
+        const logo = document.querySelector('.logo-container img');
+        if (logo) {
+            logo.style.transition = 'all 2s ease-in-out';
+            function animateLogo() {
+                const animations = [
+                    'translateY(-5px) rotate(5deg)',
+                    'translateY(0) rotate(-5deg)',
+                    'translateY(-3px) rotate(0deg)'
+                ];
+                let currentIndex = 0;
+                setInterval(() => {
+                    logo.style.transform = animations[currentIndex];
+                    currentIndex = (currentIndex + 1) % animations.length;
+                }, 2000);
+            }
+            animateLogo();
+        }
+
+        // Add bouncing animation to pet and photo cards
+        function addCardAnimations() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-10px)';
+                    card.style.transition = 'transform 0.3s ease-in-out';
+                    card.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'translateY(0)';
+                    card.style.boxShadow = 'none';
+                });
+            });
+        }
+
+        // Call the function when page loads and after any dynamic content updates
+        document.addEventListener('DOMContentLoaded', addCardAnimations);
+    </script>
+</body>
+</html>

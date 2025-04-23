@@ -1,0 +1,44 @@
+{% extends 'pets/base.html' %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>{{ pet.name }}</h1>
+            <div>
+                <a href="{% url 'photo-create' pet.pk %}" class="btn btn-success">
+                    <i class="bi bi-plus"></i> Add Photo
+                </a>
+                <a href="{% url 'pet-update' pet.pk %}" class="btn btn-outline-secondary">Edit Pet</a>
+            </div>
+        </div>
+        <p class="lead">{{ pet.get_pet_type_display }}{% if pet.breed %} · {{ pet.breed }}{% endif %}</p>
+        {% if pet.birth_date %}
+        <p>Age: {{ pet.birth_date|timesince }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<h2 class="mb-3">Photo Diary</h2>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for photo in pet.photos.all %}
+    <div class="col">
+        <div class="card h-100">
+            <img src="{{ photo.image.url }}" class="card-img-top" alt="{{ photo.caption }}">
+            <div class="card-body">
+                <p class="card-text">{{ photo.caption }}</p>
+                <small class="text-muted">{{ photo.date }}</small>
+            </div>
+            <div class="card-footer bg-transparent">
+                <a href="{% url 'photo-update' photo.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <a href="{% url 'photo-delete' photo.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">No photos yet. Add your first memory!</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'pets/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="hero">
+    <div class="hero-content">
+        <h1>Pet Photo Diary</h1>
+        <p>Keep memories of your beloved pets in one beautiful place</p>
+        <a href="{% url 'pet-list' %}" class="cta-button">View My Pets</a>
+    </div>
+</div>
+{% endblock %}
